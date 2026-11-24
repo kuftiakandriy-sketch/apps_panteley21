@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Приложения — Пантелей 21</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --card: #181b22;
+      --card-border: #262b36;
+      --text: #f3f4f6;
+      --muted: #9ca3af;
+      --accent: #ff6b00;
+      --accent-hover: #ff852e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 16px 40px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 440px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 107, 0, 0.14);
+      color: var(--accent);
+      border: 1px solid rgba(255, 107, 0, 0.3);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .app-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .app-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .app-card:active {
+      transform: scale(0.98);
+      border-color: var(--accent);
+      background: #1e222b;
+    }
+
+    .app-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .icon-citrus {
+      background: linear-gradient(135deg, #ff7a00 0%, #ff4d00 100%);
+    }
+
+    .icon-demo {
+      background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+    }
+
+    .icon-default {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+
+    .app-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .app-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .app-meta {
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dl-btn {
+      background: var(--accent);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 16px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(255, 107, 0, 0.28);
+    }
+
+    .hint-box {
+      margin-top: 28px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .hint-box strong {
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">● Пантелей 21</div>
+      <h1>Установка приложений</h1>
+      <p class="subtitle">Нажмите на нужное приложение для загрузки</p>
+    </header>
+
+    <main id="app-list" class="app-list"></main>
+
+    <div class="hint-box">
+      <strong>Как установить:</strong> нажмите «Скачать», затем в верхнем уведомлении браузера нажмите <strong>«Открыть»</strong> и подтвердите установку.
+    </div>
+  </div>
+
+  <script>
+    const REPO = "kuftiakandriy-sketch/apps_panteley21";
+    const TAG = "v1";
+
+    // Мгновенный показ ваших текущих файлов без ожидания сети
+    const FALLBACK_FILES = [
+      {
+        name: "citrus_2.0.apk",
+        sizeText: "32 МБ",
+        url: `https://github.com/${REPO}/releases/download/${TAG}/citrus_2.0.apk`
+      },
+      {
+        name: "Demo4ka.apk",
+        sizeText: "4.32 МБ",
+        url: `https://github.com/${REPO}/releases/download/${TAG}/Demo4ka.apk`
+      }
+    ];
+
+    function formatMeta(fileName) {
+      const lower = fileName.toLowerCase();
+      if (lower.includes("citrus")) {
+        return {
+          title: "Цитрус 2.0",
+          iconClass: "icon-citrus",
+          svg: `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18"/><path d="M3 12h18"/><path d="m5.6 5.6 12.8 12.8"/><path d="m18.4 5.6-12.8 12.8"/></svg>`
+        };
+      }
+      if (lower.includes("demo")) {
+        return {
+          title: "Demo4ka",
+          iconClass: "icon-demo",
+          svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><polygon points="6 4 20 12 6 20 6 4"/></svg>`
+        };
+      }
+      return {
+        title: fileName.replace(/\.apk$/i, ""),
+        iconClass: "icon-default",
+        svg: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>`
+      };
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes) return "";
+      const mb = bytes / (1024 * 1024);
+      return `${mb >= 10 ? mb.toFixed(0) : mb.toFixed(2)} МБ`;
+    }
+
+    function renderApps(items) {
+      const list = document.getElementById("app-list");
+      list.innerHTML = items.map(item => {
+        const meta = formatMeta(item.name);
+        return `
+          <a class="app-card" href="${item.url}">
+            <div class="app-icon ${meta.iconClass}">
+              ${meta.svg}
+            </div>
+            <div class="app-info">
+              <div class="app-title">${meta.title}</div>
+              <div class="app-meta">${item.name}${item.sizeText ? ` • ${item.sizeText}` : ""}</div>
+            </div>
+            <div class="dl-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Скачать
+            </div>
+          </a>
+        `;
+      }).join("");
+    }
+
+    // Сначала отрисовываем готовый список мгновенно
+    renderApps(FALLBACK_FILES);
+
+    // Затем в фоне проверяем релиз v1 — если добавите новый .apk, он подтянется сам
+    fetch(`https://api.github.com/repos/${REPO}/releases/tags/${TAG}`)
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (!data || !Array.isArray(data.assets)) return;
+        const apks = data.assets
+          .filter(a => a.name.toLowerCase().endsWith(".apk"))
+          .map(a => ({
+            name: a.name,
+            sizeText: formatBytes(a.size),
+            url: a.browser_download_url
+          }));
+        if (apks.length > 0) renderApps(apks);
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>
